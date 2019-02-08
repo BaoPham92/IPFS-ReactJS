@@ -1,13 +1,13 @@
-pragma solidity 0.5.0;
+pragma solidity 0.5.2;
 
 contract SimpleStorage {
-  string storedHash;
+  uint storedHash;
 
-  function set(string memory x) public {
+  function set(uint x) public {
     storedHash = x;
   }
 
-  function get() public view returns (string memory ) {
+  function get() public view returns (uint) {
     return storedHash;
   }
 }
