@@ -6,7 +6,23 @@ import ipfs from "./utils/API/ipfs"
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  constructor(props) {
+    super(props)
+
+    this.state = { 
+      storageValue: 0,
+      web3: null,
+      accounts: null,
+      contract: null,
+
+      // File reading.
+      buffer: null
+     }
+
+     this.uploadFile = this.uploadFile.bind(this)
+     this.submitFile = this.submitFile.bind(this)
+
+  }
 
   componentDidMount = async () => {
     try {
@@ -36,6 +52,25 @@ class App extends Component {
     }
   };
 
+  uploadFile(e) {
+    e.preventDefault();
+
+    // Web API using FileReader for uploading files: https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(e.target.files[0])
+    
+    reader.onloadend = () => {
+      // Node.js module "Buffer" rss: https://www.w3schools.com/nodejs/ref_buffer.asp
+      this.setState({ buffer: Buffer(reader.result) })
+      console.log('buffer' ,this.state.buffer)
+    }
+  }
+
+  submitFile(e) {
+    e.preventDefault();
+    console.log("submiting file")
+  }
+
   runExample = async () => {
     const { accounts, contract } = this.state;
 
@@ -57,11 +92,11 @@ class App extends Component {
       <div className="App">
         <h2>Smart Contract Image Uploader</h2>
         <p>This would be your image that is uploaded on the Ethereum blockchain.</p>
-        <img src="" alt=""/>
+        <img src="" alt="" />
 
-        <form action="">
-          <input type="file"/>
-          <input type="submit"/>
+        <form action="" onSubmit={this.submitFile}>
+          <input type="file" onChange={this.uploadFile} />
+          <input type="submit" />
         </form>
 
       </div>
