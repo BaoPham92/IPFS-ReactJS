@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./utils/getWeb3";
-import ipfs from "./utils/API/ipfs"
+import ipfs from "./utils/API/ipfs.js"
 
 import "./App.css";
 
@@ -16,7 +16,10 @@ class App extends Component {
       contract: null,
 
       // File reading.
-      buffer: null
+      buffer: null,
+
+      // ipfs.
+      ipfsHash: ''
      }
 
      this.uploadFile = this.uploadFile.bind(this)
@@ -62,13 +65,23 @@ class App extends Component {
     reader.onloadend = () => {
       // Node.js module "Buffer" rss: https://www.w3schools.com/nodejs/ref_buffer.asp
       this.setState({ buffer: Buffer(reader.result) })
-      console.log('buffer' ,this.state.buffer)
+      console.log('buffer', this.state.buffer)
     }
   }
 
   submitFile(e) {
     e.preventDefault();
     console.log("submiting file")
+
+    // ipfs-http-client API documentation: https://github.com/ipfs/js-ipfs-http-client
+    ipfs.add(this.state.buffer, (err, res) => {
+      
+      if (err) { console.log(err) }
+
+      this.setState({ ipfsHash: res[0].hash })
+      console.log('ipfsHash ', this.state.ipfsHash)
+    })
+    
   }
 
   runExample = async () => {
@@ -92,7 +105,7 @@ class App extends Component {
       <div className="App">
         <h2>Smart Contract Image Uploader</h2>
         <p>This would be your image that is uploaded on the Ethereum blockchain.</p>
-        <img src="" alt="" />
+        <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt="" />
 
         <form action="" onSubmit={this.submitFile}>
           <input type="file" onChange={this.uploadFile} />
