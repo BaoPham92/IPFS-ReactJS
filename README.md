@@ -9,6 +9,10 @@ Building a decentralized application requires stepping away from serving our app
 - [Solidity](https://solidity.readthedocs.io/en/develop/)
 - [ReactJS](https://reactjs.org/)
 
+## State of progress:
+
+Currently we are able to communicate with [IPFS](https://ipfs.io/) to upload files and return a temporary persisting data from our client. This is done by using [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader) web API and Node.js's [Buffer](https://www.w3schools.com/nodejs/ref_buffer.asp) module to stream binary data to then be stored then returning a hash for retrieving the file.
+
 ## Notes:
 
 - Keep Ganache running as part of your default (non-active) local node. Due to frameworks and dependancies that are attempting to keep up with big updates, you may have the chance to deal with something called "dependancy hell" (ground breaking changes as a result.)
